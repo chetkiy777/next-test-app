@@ -18,6 +18,7 @@ export default async function HomePage() {
     return (
         <main>
             {country && country === "UA" ? <GoodMarkup /> : <BadMarkup /> }
+            <div>{country}</div>
         </main>
     );
 }
