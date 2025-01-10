@@ -1,30 +1,22 @@
-// 'use client'
-import styles from "./page.module.css";
-// import {useEffect, useState} from "react";
-import LocationPage from "@/app/location/page";
+import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
-const Home = () => {
+export const dynamic = 'force-dynamic'; // Указывает, что страница всегда должна генерироваться сервером
 
-    // const [swData, setSwData] = useState(null);
-    //
-    // useEffect(() => {
-    //     fetch('https://swapi.py4e.com/api/people/1/')
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setSwData(data.name)
-    //         })
-    // }, []);
+export default async function HomePage() {
 
+    const token = process.env.API_TOKEN;
 
-    // if (!swData) return <div>Loading...</div>
+    // Получение данных геолокации
+    const geoResponse = await fetch(`https://ipinfo.io/json?token=${token}`, {
+        cache: 'no-store', // Отключаем кеширование для получения актуальных данных
+    });
+    const geoData = await geoResponse.json();
 
-  return (
-    <div className={styles.page}>
-        <LocationPage />
-        {/*{swData}*/}
-    </div>
-  );
+    return (
+        <main>
+            <h1>Добро пожаловать!</h1>
+            <p>Ваш город: {geoData.city || 'Неизвестно'}</p>
+            <p>Ваша страна: {geoData.country || 'Неизвестно'}</p>
+        </main>
+    );
 }
-
-export default Home
-
